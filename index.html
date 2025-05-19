@@ -3,16 +3,70 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Météo</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>Météo avec WeatherAPI</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding: 2em;
+      background: #f0f0f0;
+    }
+    input, button {
+      padding: 0.5em;
+      font-size: 1em;
+    }
+    #result {
+      margin-top: 1em;
+      background: white;
+      padding: 1em;
+      border-radius: 8px;
+      display: inline-block;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <h1>🌤️ Météo</h1>
-    <input type="text" id="cityInput" placeholder="Entrez une ville" />
-    <button id="getWeatherBtn">Obtenir la météo</button>
-    <div id="weatherResult"></div>
-  </div>
-  <script src="dist/script.js"></script>
+  <h1>🌤 Météo en direct</h1>
+  <input type="text" id="city" placeholder="Entrer une ville" />
+  <button onclick="fetchWeather()">Obtenir la météo</button>
+
+  <div id="result"></div>
+
+  <script type="text/javascript">
+    async function fetchWeather() {
+      const apiKey = "TA_CLE_API_ICI"; // Remplace ici !
+      const cityInput = document.getElementById("city");
+      const resultDiv = document.getElementById("result");
+
+      const city = cityInput.value.trim();
+      if (!city) {
+        resultDiv.innerHTML = "❗ Veuillez entrer une ville.";
+        return;
+      }
+
+      const url = `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${encodeURIComponent(city)}&lang=fr`;
+
+      try {
+        const response = await fetch(url);
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error?.message || "Erreur inconnue");
+        }
+
+        const data = await response.json();
+        const html = `
+          <h2>${data.location.name}, ${data.location.country}</h2>
+          <p><strong>🌡 Température :</strong> ${data.current.temp_c} °C</p>
+          <p><strong>🌤 Condition :</strong> ${data.current.condition.text}</p>
+          <p><strong>💨 Vent :</strong> ${data.current.wind_kph} km/h</p>
+          <img src="https:${data.current.condition.icon}" alt="Icône météo" />
+        `;
+        resultDiv.innerHTML = html;
+      } catch (error) {
+        resultDiv.innerHTML = `❌ Erreur : ${error.message}`;
+        console.error(error);
+      }
+    }
+  </script>
 </body>
 </html>
