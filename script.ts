@@ -1,4 +1,4 @@
-const apiKey = 96340270944058e631863544ec2ffac8; // Remplace par ta clé
+const apiKey = '0d6982543467021bc5342869f149442a'
 
 document.getElementById("getWeatherBtn")?.addEventListener("click", () => {
   const city = (document.getElementById("cityInput") as HTMLInputElement).value;
@@ -20,9 +20,9 @@ async function getWeather(city: string) {
 
     const result = `
       <h2>${data.name}</h2>
-      <p>🌡️ Température : ${data.main.temp}°C</p>
-      <p>☁️ Météo : ${data.weather[0].description}</p>
-      <p>💨 Vent : ${data.wind.speed} m/s</p>
+      <p>Température : ${data.main.temp}°C</p>
+      <p> Météo : ${data.weather[0].description}</p>
+      <p> Vent : ${data.wind.speed} m/s</p>
     `;
     (document.getElementById("weatherResult") as HTMLElement).innerHTML = result;
   } catch (error: any) {
