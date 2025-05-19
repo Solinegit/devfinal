@@ -1,4 +1,4 @@
-const apiKey = "96340270944058e631863544ec2ffac8"; // Remplace par ta clé
+const apiKey = 96340270944058e631863544ec2ffac8; // Remplace par ta clé
 
 document.getElementById("getWeatherBtn")?.addEventListener("click", () => {
   const city = (document.getElementById("cityInput") as HTMLInputElement).value;
