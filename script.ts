@@ -1,32 +1,47 @@
-const apiKey = 'ebc3093380409ffdf7375b5977ba4c6b'
+interface WeatherData {
+  city: string;
+  temperature: number;
+  description: string;
+  windSpeed: number;
+}
 
-document.getElementById("getWeatherBtn")?.addEventListener("click", () => {
-  const city = (document.getElementById("cityInput") as HTMLInputElement).value;
-  if (city) {
-    getWeather(city);
-  }
-});
-
-async function getWeather(city: string) {
-  const url = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${apiKey}&units=metric&lang=fr`;
+async function getWeather(city: string, apiKey: string): Promise<WeatherData | null> {
+  const url = `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${encodeURIComponent(city)}&lang=fr`;
 
   try {
     const response = await fetch(url);
-    const data = await response.json();
 
-    if (data.cod !== 200) {
-      throw new Error(data.message);
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error?.message || 'Erreur inconnue');
     }
 
-    const result = `
-      <h2>${data.name}</h2>
-      <p>Température : ${data.main.temp}°C</p>
-      <p> Météo : ${data.weather[0].description}</p>
-      <p> Vent : ${data.wind.speed} m/s</p>
-    `;
-    (document.getElementById("weatherResult") as HTMLElement).innerHTML = result;
+    const data = await response.json();
+
+    const weather: WeatherData = {
+      city: data.location.name,
+      temperature: data.current.temp_c,
+      description: data.current.condition.text,
+      windSpeed: data.current.wind_kph,
+    };
+
+    return weather;
   } catch (error: any) {
-    (document.getElementById("weatherResult") as HTMLElement).innerHTML =
-      `<p style="color:red;">Erreur : ${error.message}</p>`;
+    console.error("Erreur getWeather:", error.message || error);
+    return null;
   }
 }
+
+
+const apiKey = "2669174130844dd79cf161650251905 ";
+
+getWeather("Paris", apiKey).then((weather) => {
+  if (weather) {
+    console.log(`🌤 Ville : ${weather.city}`);
+    console.log(`🌡 Température : ${weather.temperature}°C`);
+    console.log(`📖 Description : ${weather.description}`);
+    console.log(`💨 Vent : ${weather.windSpeed} km/h`);
+  } else {
+    console.log("❌ Impossible de récupérer la météo.");
+  }
+});
