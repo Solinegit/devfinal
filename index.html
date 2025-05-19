@@ -26,7 +26,7 @@
   </style>
 </head>
 <body>
-  <h1>🌤 Météo en direct</h1>
+  <h1> Météo en direct</h1>
   <input type="text" id="city" placeholder="Entrer une ville" />
   <button onclick="fetchWeather()">Obtenir la météo</button>
 
@@ -56,14 +56,14 @@
         const data = await response.json();
         const html = `
           <h2>${data.location.name}, ${data.location.country}</h2>
-          <p><strong>🌡 Température :</strong> ${data.current.temp_c} °C</p>
-          <p><strong>🌤 Condition :</strong> ${data.current.condition.text}</p>
-          <p><strong>💨 Vent :</strong> ${data.current.wind_kph} km/h</p>
+          <p><strong> Température :</strong> ${data.current.temp_c} °C</p>
+          <p><strong> Condition :</strong> ${data.current.condition.text}</p>
+          <p><strong> Vent :</strong> ${data.current.wind_kph} km/h</p>
           <img src="https:${data.current.condition.icon}" alt="Icône météo" />
         `;
         resultDiv.innerHTML = html;
       } catch (error) {
-        resultDiv.innerHTML = `❌ Erreur : ${error.message}`;
+        resultDiv.innerHTML = ` Erreur : ${error.message}`;
         console.error(error);
       }
     }
