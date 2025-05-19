@@ -33,15 +33,3 @@ async function getWeather(city: string, apiKey: string): Promise<WeatherData | n
 }
 
 
-const apiKey = "2669174130844dd79cf161650251905 ";
-
-getWeather("Paris", apiKey).then((weather) => {
-  if (weather) {
-    console.log(`🌤 Ville : ${weather.city}`);
-    console.log(`🌡 Température : ${weather.temperature}°C`);
-    console.log(`📖 Description : ${weather.description}`);
-    console.log(`💨 Vent : ${weather.windSpeed} km/h`);
-  } else {
-    console.log("❌ Impossible de récupérer la météo.");
-  }
-});
